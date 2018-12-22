@@ -5,18 +5,27 @@ var ID = 0;
  * listTodos
  */
 function listTodos() {
+    console.log(TODOS);
     var ulEle = document.querySelector(".todo-list ul");
     // clear existing list items
     ulEle.innerHTML = '';
 
     for(var i=0; i<TODOS.length; i++) {
-        
         var liEle = document.createElement('li');
+       
+        var titleHtml = '<h3>' + TODOS[i].title + '</h3>'
+        var doneHtml = '<button type="button" onclick="doneTodo(' + TODOS[i].id  + ')">Done</button> ';
+        
+        if(TODOS[i].isDone) {
+            titleHtml = '<h3 class="todo-done">' + TODOS[i].title + '</h3>';
+            doneHtml = '';
+        }
+
         var liContent = '<li>' 
-                    + '<h3>' + TODOS[i].title + '</h3>'
+                    + titleHtml
                     + '<p>' + TODOS[i].description + '</p>'
                     + '<button type="button" onclick="clearTodo(' + TODOS[i].id  + ')">Clear</button> '
-                    + '<button type="button">Done</button> '
+                    + doneHtml
                     + '<hr />'
                     + '</li>';
         liEle.innerHTML = liContent;
@@ -50,8 +59,6 @@ function addTodo() {
  * addTodo
  */
 function clearTodo(id) {
-    console.log(id);
-
     var selectedIndex = -1;
     for(var i=0; i<TODOS.length; i++) {
         if(TODOS[i].id === id) {
@@ -63,4 +70,25 @@ function clearTodo(id) {
     listTodos();
 }
 
+/**
+ * addTodo
+ */
+function doneTodo(id) {
+    var selectedIndex = -1;
+    for(var i=0; i<TODOS.length; i++) {
+        if(TODOS[i].id === id) {
+            selectedIndex = i;
+        }
+    }
+
+    var selectedItem = TODOS[selectedIndex];
+    selectedItem.isDone = true;
+
+    TODOS.splice(selectedIndex, 1);
+    TODOS.push(selectedItem);
+
+    listTodos();
+}
+
+// init list
 listTodos();
